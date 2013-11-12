@@ -1,0 +1,5 @@
+pour la différence entre les deux fichiers entre notre methode pour stemmer et celle du prof il réside dans :
+- pour nous un mot composé exemple : arc-en-ciel sera défini comme un mot et donnera arcenciel en 1 mot
+- pour le prof le parser coupe un mot composé en autant de mot exemple arc-en-ciel donnera 3 mot
+
+Avoir ce que l'on choisi de faire?
