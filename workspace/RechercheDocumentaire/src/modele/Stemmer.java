@@ -57,6 +57,7 @@ class Stemmer {
 	j, k;
 	private static final int INC = 50;
 	private static List<String> stemmerFile = new ArrayList<>();
+	private static List<String> stemmerFile2 = new ArrayList<>();
 
 	/* unit of size whereby b is increased */
 	public Stemmer() {
@@ -567,7 +568,7 @@ class Stemmer {
 		i_end = k + 1;
 		i = 0;
 	}
-	
+
 	/**
 	 * Permet d'écrire le résultat dans le fichier de stem
 	 * @param path
@@ -580,8 +581,55 @@ class Stemmer {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("erreur lors du stemming");
 		}
 
+	}
+
+	/**
+	 * Permet d'écrire le résultat dans le fichier de stem
+	 * @param path
+	 */
+	public static void writeFileStemmer2(String path){
+		//		Path helloPath = Paths.get("./src/doc/AP890101_s5.txt");
+		Path stemmerFilePath = Paths.get(path);
+		try {
+			Files.write(stemmerFilePath, stemmerFile2, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("erreur lors du stemming");
+		}
+
+	}
+
+	public void stemmerArray(ArrayList<String> lines){
+		for (String l : lines){
+			char[]w =l.toCharArray();
+			int j = 0;
+			for (int i = 0; i < w.length; i++) {
+				if (Character.isLetter((char) w[i])) {
+					w[i] = Character.toLowerCase((char) w[i]);
+					w[j] = (char) w[i];
+					if (j < 500){
+						j++;
+					}
+				}
+				if (i==w.length-1) {
+					/* to test add(char ch) */
+					for (int c = 0; c < j; c++){
+						this.add(w[c]);
+					}
+					this.stem();
+					String wordStemmer = new String(this.getResultBuffer(), 0, this.getResultLength());
+					if(!(wordStemmer.equals(""))){
+						stemmerFile2.add(wordStemmer);
+					}
+				}
+			}
+		}
+
+		writeFileStemmer2("./src/doc/AP890101_stemmer2.txt");
 	}
 
 	/**
@@ -591,64 +639,64 @@ class Stemmer {
 	 * must be done outside the Stemmer class. Usage: Stemmer file-name
 	 * file-name ...
 	 */
-	public static void main(String[] args) {
+	//	public static void main(String[] args) {
+	public void init(){
 		char[] w = new char[501];
 		Stemmer s = new Stemmer();
-		for (int i = 0; i < args.length; i++)
+		try {
+			FileInputStream in = new FileInputStream("./src/doc/AP890101_parser.txt");
 			try {
-				FileInputStream in = new FileInputStream("./src/doc/AP890101_s4.txt");
-				try {
-					while (true){
-						int ch = in.read();
-						if (Character.isLetter((char) ch)) {
-							int j = 0;
-							while (true) {
-								ch = Character.toLowerCase((char) ch);
-								w[j] = (char) ch;
-								if (j < 500)
-									j++;
-								ch = in.read();
-								if (!Character.isLetter((char) ch)) {
-									/* to test add(char ch) */
-									for (int c = 0; c < j; c++)
-										s.add(w[c]);
+				while (true){
+					int ch = in.read();
+					if (Character.isLetter((char) ch)) {
+						int j = 0;
+						while (true) {
+							ch = Character.toLowerCase((char) ch);
+							w[j] = (char) ch;
+							if (j < 500)
+								j++;
+							ch = in.read();
+							if (!Character.isLetter((char) ch)) {
+								/* to test add(char ch) */
+								for (int c = 0; c < j; c++)
+									s.add(w[c]);
 
-									/* or, to test add(char[] w, int j) */
-									/* s.add(w, j); */
+								/* or, to test add(char[] w, int j) */
+								/* s.add(w, j); */
 
-									s.stem();
-									{
-										String u;
+								s.stem();
+								{
+									String u;
 
-										/* and now, to test toString() : */
-										u = s.toString();
+									/* and now, to test toString() : */
+									u = s.toString();
 
-										/*
-										 * to test getResultBuffer(),
-										 * getResultLength() :
-										 */
-										u = new String(s.getResultBuffer(), 0,s.getResultLength());
+									/*
+									 * to test getResultBuffer(),
+									 * getResultLength() :
+									 */
+									u = new String(s.getResultBuffer(), 0,s.getResultLength());
 
-										// System.out.print(u);
-										stemmerFile.add(u);
-									}
-									break;
+									// System.out.print(u);
+									stemmerFile.add(u);
 								}
+								break;
 							}
 						}
-						if (ch < 0)
-							break;
-						System.out.print((char) ch);
 					}
-				} catch (IOException e) {
-					System.out.println("error reading files");
-					break;
+					if (ch < 0)
+						break;
+					System.out.print((char) ch);
 				}
-			} catch (FileNotFoundException e) {
-				System.out.println("file " + args[i] + " not found");
-				break;
+			} catch (IOException e) {
+				System.out.println("error reading files");
 			}
-		writeFileStemmer("./src/doc/AP890101_s5.txt");
+		} catch (FileNotFoundException e) {
+			System.out.println("file  not found");
+		}
+
+
+		writeFileStemmer("./src/doc/AP890101_stemmer1.txt");
 	}
 
 }

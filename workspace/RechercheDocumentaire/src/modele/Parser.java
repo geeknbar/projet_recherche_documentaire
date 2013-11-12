@@ -17,7 +17,7 @@ public class Parser {
 	/**
 	 * @param args
 	 */
-	private static List<String> lines = new ArrayList<>();
+	private static ArrayList<String> lines = new ArrayList<>();
 
 	private static ArrayList<String> stopwords = new ArrayList<>();
 
@@ -126,8 +126,9 @@ public class Parser {
 			e.printStackTrace();
 		}
 	}
-	public static List<String> getLines() {
+
+	public ArrayList<String> getLines() {
 		return lines;
-	}
+	}	
 
 }
