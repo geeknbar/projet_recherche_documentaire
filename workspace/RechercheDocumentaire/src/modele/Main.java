@@ -3,6 +3,12 @@ package modele;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -11,7 +17,9 @@ public class Main {
 	/**
 	 * @param args
 	 */
-	
+	private static List<String> lines = new ArrayList<>();
+	private static ArrayList<String> stopwords = new ArrayList<>();
+
 	public static void loadfile(String file)
 	{
 		boolean intext=false;
@@ -35,8 +43,8 @@ public class Main {
 		next.add("</DATELINE>");
 		next.add("<HEAD>");
 		next.add("</HEAD>");
-		
-		
+
+
 		System.out.println("************* File: "+file+" ***********************");
 		try
 		{
@@ -50,7 +58,7 @@ public class Main {
 					if(line.equals(" ")) line = input.readLine();
 					StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
 					String firstToken = token.nextToken();
-					
+
 					for(int i=0; i<next.size(); i++)
 					{
 						//firstToken.
@@ -65,10 +73,17 @@ public class Main {
 					}
 					if (intext==true && !("<TEXT>".equals(firstToken))) 
 					{
-						System.out.println(firstToken);
+						//						System.out.println(firstToken);
+						if (!(stopwords.contains(firstToken.toLowerCase()))){
+							lines.add(firstToken);
+						}
 						while(token.hasMoreTokens())
 						{
-							System.out.println(token.nextToken());
+							//							System.out.println(token.nextToken());
+							String nextToken = token.nextToken();
+							if (!(stopwords.contains(nextToken.toLowerCase()))){
+								lines.add(nextToken);
+							}
 						}
 					}
 				}
@@ -81,15 +96,36 @@ public class Main {
 			System.err.println("Erreur:loadFile(" + file + "):" + ex.getMessage());
 		}
 	}
-	
+
+	public static void chargerStopWord(){
+
+		List<String> lignes= null;
+		try {
+			lignes = Files.readAllLines(Paths.get("./src/doc/stopwords.txt"), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (String ligne : lignes){
+			stopwords.add(ligne);
+		}
+	}
+
 	public static void main(String[] args) {
 		int filenumber=101;
 		//while(filenumber<103)
 		//{
-			String file = "AP890"+Integer.toString(filenumber);
-			System.out.println("******file:"+file);
-			loadfile(file);
-			//filenumber++;
+		chargerStopWord();
+		String file = "./src/doc/AP890101.txt";
+		System.out.println("******file:"+file);
+		loadfile(file);
+		try {
+			Files.write(Paths.get("./src/doc/AP890101_s4.txt"), lines, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//filenumber++;
 		//}
 	}
 
