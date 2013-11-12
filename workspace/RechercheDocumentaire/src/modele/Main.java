@@ -1,6 +1,4 @@
 package modele;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
@@ -13,7 +11,8 @@ public class Main {
 		s.init();
 		s.stemmerArray(p.getLines());
 		Dictionary dic = new Dictionary();
-		dic.fillDictionary(s.getStemmerFile2());
+		int docID = 890101;
+		dic.fillDictionary(s.getStemmerFile2(),docID);
 		dic.displayInfos();
 	}
 }

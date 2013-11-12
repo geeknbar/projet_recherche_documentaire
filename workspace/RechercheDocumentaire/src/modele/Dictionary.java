@@ -11,9 +11,9 @@ public class Dictionary {
 		dictionary = new HashMap<String, Integer>();
 	}
 	
-	public void fillDictionary(ArrayList<String> stemmerFile){
+	public void fillDictionary(ArrayList<String> stemmerFile, int docID){
 		for(String word : stemmerFile){
-			this.addWord(word, 1);
+			this.addWord(word, docID);
 		}
 		
 	}
