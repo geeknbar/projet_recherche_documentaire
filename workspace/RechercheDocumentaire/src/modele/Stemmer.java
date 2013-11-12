@@ -65,6 +65,7 @@ class Stemmer {
 		i_end = 0;
 	}
 
+
 	/**
 	 * Add a character to the word being stemmed. When you are finished adding
 	 * characters, you can call stem(void) to stem the word.
@@ -696,6 +697,14 @@ class Stemmer {
 
 
 		writeFileStemmer("./src/doc/AP890101_stemmer1.txt");
+	}
+	
+	public static ArrayList<String> getStemmerFile() {
+		return stemmerFile;
+	}
+
+	public ArrayList<String> getStemmerFile2() {
+		return stemmerFile2;
 	}
 
 }
