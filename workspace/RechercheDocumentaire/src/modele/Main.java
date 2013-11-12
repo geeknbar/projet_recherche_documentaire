@@ -44,7 +44,6 @@ public class Main {
 		next.add("<HEAD>");
 		next.add("</HEAD>");
 
-
 		System.out.println("************* File: "+file+" ***********************");
 		try
 		{
@@ -112,21 +111,20 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		int filenumber=101;
-		//while(filenumber<103)
-		//{
 		chargerStopWord();
 		String file = "./src/doc/AP890101.txt";
 		System.out.println("******file:"+file);
 		loadfile(file);
+		writeFile("./src/doc/AP890101_s4.txt");
+	}
+	
+	public static void writeFile(String path){
 		try {
-			Files.write(Paths.get("./src/doc/AP890101_s4.txt"), lines, Charset.forName("UTF-8"));
+			Files.write(Paths.get(path), lines, Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//filenumber++;
-		//}
 	}
 
 }
