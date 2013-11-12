@@ -57,6 +57,7 @@ class Stemmer {
 	i_end, /* offset to end of stemmed word */
 	j, k;
 	private static final int INC = 50;
+	private static List<String> stemmerFile = new ArrayList<>();
 
 	/* unit of size whereby b is increased */
 	public Stemmer() {
@@ -567,6 +568,22 @@ class Stemmer {
 		i_end = k + 1;
 		i = 0;
 	}
+	
+	/**
+	 * Permet d'écrire le résultat dans le fichier de stem
+	 * @param path
+	 */
+	public static void writeFileStemmer(String path){
+		//		Path helloPath = Paths.get("./src/doc/AP890101_s5.txt");
+		Path stemmerFilePath = Paths.get(path);
+		try {
+			Files.write(stemmerFilePath, stemmerFile, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	/**
 	 * Test program for demonstrating the Stemmer. It reads text from a a list
@@ -580,13 +597,9 @@ class Stemmer {
 		Stemmer s = new Stemmer();
 		for (int i = 0; i < args.length; i++)
 			try {
-				FileInputStream in = new FileInputStream(
-						"./src/doc/AP890101_s4.txt");
-
+				FileInputStream in = new FileInputStream("./src/doc/AP890101_s4.txt");
 				try {
-					while (true)
-
-					{
+					while (true){
 						int ch = in.read();
 						if (Character.isLetter((char) ch)) {
 							int j = 0;
@@ -615,21 +628,10 @@ class Stemmer {
 										 * to test getResultBuffer(),
 										 * getResultLength() :
 										 */
-										u = new String(s.getResultBuffer(), 0,
-												s.getResultLength());
+										u = new String(s.getResultBuffer(), 0,s.getResultLength());
 
 										// System.out.print(u);
-
-										Path helloPath = Paths
-												.get("./src/doc/AP890101_s5.txt");
-										// List<String> lines = new
-										// ArrayList<>();
-										List<String> lines = Files
-												.readAllLines(helloPath,
-														StandardCharsets.UTF_8);
-										lines.add(u);
-										Files.write(helloPath, lines,
-												Charset.forName("UTF-8"));
+										stemmerFile.add(u);
 									}
 									break;
 								}
@@ -647,5 +649,7 @@ class Stemmer {
 				System.out.println("file " + args[i] + " not found");
 				break;
 			}
+		writeFileStemmer("./src/doc/AP890101_s5.txt");
 	}
+
 }

@@ -73,13 +73,13 @@ public class Main {
 					}
 					if (intext==true && !("<TEXT>".equals(firstToken))) 
 					{
-						//						System.out.println(firstToken);
+						//System.out.println(firstToken);
 						if (!(stopwords.contains(firstToken.toLowerCase()))){
 							lines.add(firstToken);
 						}
 						while(token.hasMoreTokens())
 						{
-							//							System.out.println(token.nextToken());
+							//System.out.println(token.nextToken());
 							String nextToken = token.nextToken();
 							if (!(stopwords.contains(nextToken.toLowerCase()))){
 								lines.add(nextToken);
