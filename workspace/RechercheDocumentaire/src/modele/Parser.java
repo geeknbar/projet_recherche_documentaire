@@ -18,6 +18,7 @@ public class Parser {
 	 * @param args
 	 */
 	private static List<String> lines = new ArrayList<>();
+
 	private static ArrayList<String> stopwords = new ArrayList<>();
 
 	public static void loadfile(String file)
@@ -110,12 +111,11 @@ public class Parser {
 		}
 	}
 
-	public static void main(String[] args) {
+	public void init(String docPath) {
 		chargerStopWord();
-		String file = "./src/doc/AP890101.txt";
-		System.out.println("******file:"+file);
-		loadfile(file);
-		writeFile("./src/doc/AP890101_s4.txt");
+		System.out.println("******file : "+docPath);
+		loadfile(docPath);
+		writeFile("./src/doc/AP890101_parser.txt");
 	}
 	
 	public static void writeFile(String path){
@@ -125,6 +125,9 @@ public class Parser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public static List<String> getLines() {
+		return lines;
 	}
 
 }
