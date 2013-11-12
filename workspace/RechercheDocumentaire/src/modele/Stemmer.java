@@ -40,7 +40,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Stemmer, implementing the Porter Stemming Algorithm
@@ -56,8 +55,8 @@ class Stemmer {
 	i_end, /* offset to end of stemmed word */
 	j, k;
 	private static final int INC = 50;
-	private static List<String> stemmerFile = new ArrayList<>();
-	private static List<String> stemmerFile2 = new ArrayList<>();
+	private static ArrayList<String> stemmerFile = new ArrayList<>();
+	private static ArrayList<String> stemmerFile2 = new ArrayList<>();
 
 	/* unit of size whereby b is increased */
 	public Stemmer() {
