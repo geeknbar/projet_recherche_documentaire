@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Main {
 
 	public static void main(String[] args) {
-		String path = "~/Documents/";
+		String path = "/home/thibault/workspaces/recherche_documentaire/Test/src/files";
 		DirectoryBrowsing direct = new DirectoryBrowsing(path);
+		direct.loadFiles();
 		ArrayList<String> listCorpus = direct.getFilesPath();
 		for (String filePath : listCorpus) {
 			Parser p = new Parser();

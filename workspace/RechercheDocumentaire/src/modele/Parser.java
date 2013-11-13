@@ -101,7 +101,7 @@ public class Parser {
 
 		List<String> lignes= null;
 		try {
-			lignes = Files.readAllLines(Paths.get("./src/doc/stopwords.txt"), StandardCharsets.UTF_8);
+			lignes = Files.readAllLines(Paths.get("./bin/doc/stopwords.txt"), StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,7 +115,7 @@ public class Parser {
 		chargerStopWord();
 		System.out.println("******file : "+docPath);
 		loadfile(docPath);
-		writeFile("./src/doc/AP890101_parser.txt");
+		writeFile("./bin/doc/AP890101_parser.txt");
 	}
 	
 	public static void writeFile(String path){

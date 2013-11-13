@@ -629,7 +629,7 @@ class Stemmer {
 			}
 		}
 
-		writeFileStemmer2("./src/doc/AP890101_stemmer2.txt");
+		writeFileStemmer2("./bin/doc/AP890101_stemmer2.txt");
 	}
 
 	/**
@@ -644,7 +644,7 @@ class Stemmer {
 		char[] w = new char[501];
 		Stemmer s = new Stemmer();
 		try {
-			FileInputStream in = new FileInputStream("./src/doc/AP890101_parser.txt");
+			FileInputStream in = new FileInputStream("./bin/doc/AP890101_parser.txt");
 			try {
 				while (true){
 					int ch = in.read();
@@ -686,7 +686,7 @@ class Stemmer {
 					}
 					if (ch < 0)
 						break;
-					System.out.print((char) ch);
+					//System.out.print((char) ch);
 				}
 			} catch (IOException e) {
 				System.out.println("error reading files");
@@ -696,7 +696,7 @@ class Stemmer {
 		}
 
 
-		writeFileStemmer("./src/doc/AP890101_stemmer1.txt");
+		writeFileStemmer("./bin/doc/AP890101_stemmer1.txt");
 	}
 	
 	public static ArrayList<String> getStemmerFile() {
