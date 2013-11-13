@@ -51,7 +51,7 @@ public class Query {
 		} 
 	}
 	
-	private void queryProcess(String query) {
+	public void queryProcess(String query) {
 		stemQuery = parser.tokenizeLine(query);
 		for (String word : stemQuery) {
 			if (dictionary.containsKey(word)) {
@@ -93,26 +93,28 @@ public class Query {
 		return dictionary;
 	}
 	
-	public void displayResult() {
+	public String displayResult() {
 		System.out.println(sortResult().size());
+		String result="";
 		for (String s : sortResult()) {
-			System.out.println(s);
+			result = result +s+"\n";
 		}
+		return result;
 	}
 
-	public static void main(String[] args) {
-		long start = System.currentTimeMillis();
-		Query q = new Query();
-		q.loadDictionary("./bin/doc/dictionary.txt");
-		//q.queryProcess("politicians talk disparagingly of the ``Vietnam Syndrome''");
-		q.queryProcess("syndrome");
-		for (String s : q.stemQuery) {
-			System.out.println(s);
-		}
-		q.displayResult();
-		long stop = System.currentTimeMillis();
-		System.out.println(stop - start);
-	}
+//	public static void main(String[] args) {
+//		long start = System.currentTimeMillis();
+//		Query q = new Query();
+//		q.loadDictionary("./bin/doc/dictionary.txt");
+//		//q.queryProcess("politicians talk disparagingly of the ``Vietnam Syndrome''");
+//		q.queryProcess("syndrome");
+//		for (String s : q.stemQuery) {
+//			System.out.println(s);
+//		}
+//		q.displayResult();
+//		long stop = System.currentTimeMillis();
+//		System.out.println(stop - start);
+//	}
 
 	public void writeFileDictionnary(String path) {
 		Path stemmerFilePath = Paths.get(path);
@@ -132,5 +134,11 @@ public class Query {
 		}
 
 	}
+
+	public ArrayList<String> getStemQuery() {
+		return stemQuery;
+	}
+	
+	
 
 }

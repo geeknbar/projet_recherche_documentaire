@@ -12,10 +12,12 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
+import javax.swing.ScrollPaneConstants;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -27,6 +29,7 @@ import javax.swing.JTextArea;
 import modele.Dictionary;
 import modele.DirectoryBrowsing;
 import modele.Parser;
+import modele.Query;
 
 
 public class UIRechercheDoc extends JFrame implements ActionListener {
@@ -37,7 +40,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField pathDictionary;
-	private JTextField textField_1;
+	private JTextField user_query;
 	private JButton btn_file;
 	private JButton btn_load;
 	private JButton btn_proceed;
@@ -75,6 +78,14 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 			p.clearStemmerFile();
 		}
 		dic.writeFileDictionnary("./bin/doc/dictionary.txt");
+	}
+	
+	public String proceedQuery(){
+		Query q = new Query();
+		q.loadDictionary("./bin/doc/dictionary.txt");
+		q.queryProcess(user_query.getText());
+		String result = q.displayResult();
+		return result;
 	}
 	/**
 	 * Create the frame.
@@ -147,9 +158,9 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
 		horizontalBox_1.add(horizontalStrut_1);
 
-		textField_1 = new JTextField();
-		horizontalBox_1.add(textField_1);
-		textField_1.setColumns(10);
+		user_query = new JTextField();
+		horizontalBox_1.add(user_query);
+		user_query.setColumns(10);
 
 		JPanel panel_answers = new JPanel();
 		contentPane.add(panel_answers, BorderLayout.CENTER);
@@ -167,8 +178,13 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		Box horizontalBox_3 = Box.createHorizontalBox();
 		verticalBox.add(horizontalBox_3);
 
+
 		results = new JTextArea();
-		horizontalBox_3.add(results);
+	    results.setEditable(false); // set textArea non-editable
+	    JScrollPane scroll = new JScrollPane(results);
+	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+		horizontalBox_3.add(scroll);
 	}
 
 	@Override
@@ -186,8 +202,15 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == btn_load){
 			loadDictionaryFromPath(pathDictionary.getText());
-			JOptionPane.showMessageDialog(this, "Dictionary load, you can ask a querry");
+			JOptionPane.showMessageDialog(this, "Dictionary load, you can ask a query");
 			dictionaryLoad = true;
+		}
+		if (e.getSource() == btn_proceed){
+			if(dictionaryLoad){
+				results.append( proceedQuery());
+			}else{
+				JOptionPane.showMessageDialog(this, "Please load a dictionary to proceed query");
+			}
 		}
 
 	}
