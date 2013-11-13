@@ -1,13 +1,6 @@
 package modele;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class Main {
 
@@ -39,29 +32,8 @@ public class Main {
 			//if (i==10) break;
 		}
 		long stop = System.currentTimeMillis();
-		writeFileDictionnary("./src/doc/dictionary.txt", dic.getDictionary());
+		dic.writeFileDictionnary("./src/doc/dictionary.txt");
 		System.out.println(stop - start);
-
 	}
 
-	public static void writeFileDictionnary(String path,
-			HashMap<String, ArrayList<String>> hashMapDic) {
-		Path stemmerFilePath = Paths.get(path);
-		ArrayList<String> arrayDic = new ArrayList<>();
-		for (Entry<String, ArrayList<String>> entry : hashMapDic.entrySet()) {
-			String cle = entry.getKey();
-			ArrayList<String> valeur = entry.getValue();
-			String wordDocId = cle + valeur.toString();
-			arrayDic.add(wordDocId);
-			// traitements
-		}
-		try {
-			Files.write(stemmerFilePath, arrayDic, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("erreur lors du stemming");
-		}
-
-	}
 }
