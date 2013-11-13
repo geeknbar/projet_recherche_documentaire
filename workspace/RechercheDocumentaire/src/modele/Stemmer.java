@@ -707,4 +707,9 @@ class Stemmer {
 		return stemmerFile2;
 	}
 
+	public void setStemmerFile2(ArrayList<String> stemmerFile2) {
+		Stemmer.stemmerFile2 = stemmerFile2;
+	}
+	
+
 }

@@ -128,6 +128,11 @@ public class Parser {
 
 	public ArrayList<String> getLines() {
 		return lines;
+	}
+
+	public void setLines(ArrayList<String> lines) {
+		Parser.lines = lines;
 	}	
+	
 
 }
