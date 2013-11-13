@@ -10,20 +10,23 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 public class Parser {
 
 	/**
 	 * @param args
 	 */
-	private static ArrayList<String> lines = new ArrayList<>();
-
-	private static ArrayList<String> stopwords = new ArrayList<>();
-
-	public static void loadfile(String file) {
-		boolean intext = false;
-		Vector<String> next = new Vector<String>();
+	private static ArrayList<String> lines;
+	private static ArrayList<String> stopwords;
+	private static ArrayList<String> next;
+	private Stemmer s;
+	
+	public Parser() {
+		lines = new ArrayList<String>();
+		stopwords = new ArrayList<String>();
+		next = new ArrayList<String>();
+		s = new Stemmer();
+		chargerStopWord();
 		next.add("</TEXT>");
 		next.add("<DOC>");
 		next.add("</DOC>");
@@ -43,18 +46,19 @@ public class Parser {
 		next.add("</DATELINE>");
 		next.add("<HEAD>");
 		next.add("</HEAD>");
+	}
 
+	public void loadFile(String file) {
+		lines.clear();
+		boolean intext = false;		
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(file));
 			try {
 				String line = null;
-				while ((line = input.readLine()) != null
-						&& !line.replaceAll("[\\s\\p{Punct}]", "").trim()
-								.isEmpty()) {
+				while ((line = input.readLine()) != null && !line.replaceAll("[\\s\\p{Punct}]", "").trim().isEmpty()) {
 					// System.out.println(line);
 					// On split la ligne
-					StringTokenizer token = new StringTokenizer(line,
-							" ''``;,.\n\t\r");
+					StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
 					String firstToken = token.nextToken();
 					for (int i = 0; i < next.size(); i++) {
 						// firstToken.
@@ -69,13 +73,13 @@ public class Parser {
 					if (intext == true && !("<TEXT>".equals(firstToken))) {
 						// System.out.println(firstToken);
 						if (!(stopwords.contains(firstToken.toLowerCase()))) {
-							lines.add(firstToken);
+							s.stemmerWord(firstToken);
 						}
 						while (token.hasMoreTokens()) {
 							// System.out.println(token.nextToken());
 							String nextToken = token.nextToken();
 							if (!(stopwords.contains(nextToken.toLowerCase()))) {
-								lines.add(nextToken);
+								s.stemmerWord(nextToken);
 							}
 						}
 					}
@@ -90,13 +94,10 @@ public class Parser {
 	}
 
 	public static void chargerStopWord() {
-
 		List<String> lignes = null;
 		try {
-			lignes = Files.readAllLines(Paths.get("./bin/doc/stopwords.txt"),
-					StandardCharsets.UTF_8);
+			lignes = Files.readAllLines(Paths.get("./bin/doc/stopwords.txt"), StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for (String ligne : lignes) {
@@ -104,18 +105,10 @@ public class Parser {
 		}
 	}
 
-	public void init(String docPath) {
-		chargerStopWord();
-		// System.out.println("******file : "+docPath);
-		loadfile(docPath);
-		// writeFile("./bin/doc/AP890101_parser.txt");
-	}
-
 	public static void writeFile(String path) {
 		try {
 			Files.write(Paths.get(path), lines, Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -126,6 +119,14 @@ public class Parser {
 
 	public void setLines(ArrayList<String> lines) {
 		Parser.lines = lines;
+	}
+	
+	public ArrayList<String> getStemmerFile() {
+		return s.getStemmerFile();
+	}
+	
+	public void clearStemmerFile() {
+		s.clearStemmerFile();
 	}
 
 }

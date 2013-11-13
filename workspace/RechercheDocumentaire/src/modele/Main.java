@@ -13,19 +13,17 @@ public class Main {
 		// ArrayList<String> listCorpus = new ArrayList<String>();
 		// listCorpus.add("/home/dorian/Documents/projet_recherche_documentaire/workspace/RechercheDocumentaire/./bin/corpus/DOSSIER_2/AP890203.txt");
 		int i = 0;
+		
+		Parser p  = new Parser();
+		
 		Dictionary dic = new Dictionary();
+		
 		for (String filePath : listCorpus) {
-
-			Parser p = new Parser();
-			p.init(filePath);
-			Stemmer s = new Stemmer();
-			s.stemmerArray(p.getLines());
-
+			p.loadFile(filePath);
 			String docID = direct.getFileName(filePath);
-			dic.fillDictionary(s.getStemmerFile(), docID);
+			dic.fillDictionary(p.getStemmerFile(), docID);
 			// dic.displayInfos();
-			s.setStemmerFile(new ArrayList<String>());
-			p.setLines(new ArrayList<String>());
+			p.clearStemmerFile();
 			System.out.println(i);
 			i++;
 			// if (i==50) dic.displayInfos();
