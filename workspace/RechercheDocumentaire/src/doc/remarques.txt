@@ -11,3 +11,6 @@ Le main fonctionne ce qu'il reste à faire :
 -> revoir le dictionnaire il faut un dictionnaire contenant chaque dictionnaire de chaque fichier non? je réexpliquerai
 (j'ai peu être oublié un truc dans le raisonnement :D)
 -> faire la classe qui va traiter la querry de l'utilisateur et la classe qui va chercher dans notre dicotionnaire
+
+
+Premier lancement 1741611ms
