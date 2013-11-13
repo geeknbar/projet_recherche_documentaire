@@ -52,7 +52,7 @@ public class Query {
 	}
 	
 	private void queryProcess(String query) {
-		ArrayList<String> stemQuery = parser.tokenizeLine(query);
+		stemQuery = parser.tokenizeLine(query);
 		for (String word : stemQuery) {
 			if (dictionary.containsKey(word)) {
 				for (String docID : dictionary.get(word)) {
@@ -88,14 +88,10 @@ public class Query {
 	}
 	
 	public void displayResult() {
-		int count = 0;
-		for (String s : sortResult()) {
+		System.out.println(sortResult().size());
+		/*for (String s : sortResult()) {
 			System.out.println(s);
-			count++;
-			if (count == 5) {
-				break;
-			}
-		}
+		}*/
 	}
 
 	public static void main(String[] args) {
@@ -106,7 +102,7 @@ public class Query {
 		for (String s : q.stemQuery) {
 			System.out.println(s);
 		}
-		//q.displayResult();
+		q.displayResult();
 		long stop = System.currentTimeMillis();
 		System.out.println(stop - start);
 	}
