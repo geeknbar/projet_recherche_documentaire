@@ -14,3 +14,4 @@ Le main fonctionne ce qu'il reste à faire :
 
 
 Premier lancement 1741611ms
+                  1788583ms
