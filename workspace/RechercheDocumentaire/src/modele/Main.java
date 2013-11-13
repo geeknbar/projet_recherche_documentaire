@@ -9,6 +9,8 @@ public class Main {
 		DirectoryBrowsing direct = new DirectoryBrowsing(path);
 		direct.loadFiles();
 		ArrayList<String> listCorpus = direct.getFilesPath();
+//		ArrayList<String> listCorpus = new ArrayList<String>();
+//		listCorpus.add("/home/dorian/Documents/projet_recherche_documentaire/workspace/RechercheDocumentaire/./bin/corpus/DOSSIER_2/AP890203.txt");
 		for (String filePath : listCorpus) {
 			Parser p = new Parser();
 			p.init(filePath);

@@ -52,13 +52,12 @@ public class Parser {
 			try
 			{
 				String line = null;
-				while ((line = input.readLine()) != null && line.length()!=0)
+				while ((line = input.readLine()) != null)
 				{
 					// On split la ligne
-					if(line.equals(" ")) line = input.readLine();
+					if(line.trim().isEmpty()) line = input.readLine();
 					StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
 					String firstToken = token.nextToken();
-
 					for(int i=0; i<next.size(); i++)
 					{
 						//firstToken.
@@ -117,7 +116,7 @@ public class Parser {
 		loadfile(docPath);
 		writeFile("./bin/doc/AP890101_parser.txt");
 	}
-	
+
 	public static void writeFile(String path){
 		try {
 			Files.write(Paths.get(path), lines, Charset.forName("UTF-8"));
