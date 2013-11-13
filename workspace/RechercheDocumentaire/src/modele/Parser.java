@@ -21,9 +21,8 @@ public class Parser {
 
 	private static ArrayList<String> stopwords = new ArrayList<>();
 
-	public static void loadfile(String file)
-	{
-		boolean intext=false;
+	public static void loadfile(String file) {
+		boolean intext = false;
 		Vector<String> next = new Vector<String>();
 		next.add("</TEXT>");
 		next.add("<DOC>");
@@ -45,79 +44,75 @@ public class Parser {
 		next.add("<HEAD>");
 		next.add("</HEAD>");
 
-		//System.out.println("************* File: "+file+" ***********************");
-		try
-		{
+		// System.out.println("************* File: "+file+" ***********************");
+		try {
 			BufferedReader input = new BufferedReader(new FileReader(file));
-			try
-			{
+			try {
 				String line = null;
-				while ((line = input.readLine()) != null && !line.replaceAll("[\\s\\p{Punct}]","").trim().isEmpty())
-				{
-					//System.out.println(line);
+				while ((line = input.readLine()) != null
+						&& !line.replaceAll("[\\s\\p{Punct}]", "").trim()
+								.isEmpty()) {
+					// System.out.println(line);
 					// On split la ligne
-					StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
+					StringTokenizer token = new StringTokenizer(line,
+							" ''``;,.\n\t\r");
 					String firstToken = token.nextToken();
-					for(int i=0; i<next.size(); i++)
-					{
-						//firstToken.
-						if(firstToken.contains(next.get(i))) 
-						{
-							intext=false;
+					for (int i = 0; i < next.size(); i++) {
+						// firstToken.
+						if (firstToken.contains(next.get(i))) {
+							intext = false;
 							break;
-						}else if ("<TEXT>".equals(firstToken)) {
-							intext=true;
+						} else if ("<TEXT>".equals(firstToken)) {
+							intext = true;
 							break;
 						}
 					}
-					if (intext==true && !("<TEXT>".equals(firstToken))) 
-					{
-						//System.out.println(firstToken);
-						if (!(stopwords.contains(firstToken.toLowerCase()))){
+					if (intext == true && !("<TEXT>".equals(firstToken))) {
+						// System.out.println(firstToken);
+						if (!(stopwords.contains(firstToken.toLowerCase()))) {
 							lines.add(firstToken);
 						}
-						while(token.hasMoreTokens())
-						{
-							//System.out.println(token.nextToken());
+						while (token.hasMoreTokens()) {
+							// System.out.println(token.nextToken());
 							String nextToken = token.nextToken();
-							if (!(stopwords.contains(nextToken.toLowerCase()))){
+							if (!(stopwords.contains(nextToken.toLowerCase()))) {
 								lines.add(nextToken);
 							}
 						}
 					}
 				}
-			} finally
-			{
+			} finally {
 				input.close();
 			}
-		} catch (IOException ex)
-		{
-			System.err.println("Erreur:loadFile(" + file + "):" + ex.getMessage());
+		} catch (IOException ex) {
+			System.err.println("Erreur:loadFile(" + file + "):"
+					+ ex.getMessage());
 		}
 	}
 
-	public static void chargerStopWord(){
+	public static void chargerStopWord() {
 
-		List<String> lignes= null;
+		List<String> lignes = null;
 		try {
-			lignes = Files.readAllLines(Paths.get("./bin/doc/stopwords.txt"), StandardCharsets.UTF_8);
+			lignes = Files.readAllLines(Paths.get("./bin/doc/stopwords.txt"),
+					StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (String ligne : lignes){
+		for (String ligne : lignes) {
 			stopwords.add(ligne);
 		}
 	}
 
 	public void init(String docPath) {
 		chargerStopWord();
-		//System.out.println("******file : "+docPath);
+		// System.out.println("******file : "+docPath);
 		loadfile(docPath);
-		//writeFile("./bin/doc/AP890101_parser.txt");
+		// writeFile("./bin/doc/AP890101_parser.txt");
 	}
 
-	public static void writeFile(String path){
+	public static void writeFile(String path) {
 		try {
 			Files.write(Paths.get(path), lines, Charset.forName("UTF-8"));
 		} catch (IOException e) {
@@ -132,7 +127,6 @@ public class Parser {
 
 	public void setLines(ArrayList<String> lines) {
 		Parser.lines = lines;
-	}	
-	
+	}
 
 }
