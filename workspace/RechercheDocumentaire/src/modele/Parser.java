@@ -99,7 +99,7 @@ public class Parser {
 		}
 	}
 	
-	public String tokenizeLine(String line) {
+	public ArrayList<String> tokenizeLine(String line) {
 		lines.clear();
 		StringTokenizer tokens = new StringTokenizer(line, " ''``;,.\n\t\r");
 		String word = "";
@@ -109,13 +109,7 @@ public class Parser {
 				s.stemmerWord(word);
 			}
 		}
-		ArrayList<String> stemWords = new ArrayList<String>();
-		stemWords = s.getStemmerFile();
-		String stemQuery = "";
-		for (String s : stemWords) {
-			stemQuery += s + " ";
-		}
-		return stemQuery;
+		return s.getStemmerFile();
 	}
 
 	public static void chargerStopWord() {
