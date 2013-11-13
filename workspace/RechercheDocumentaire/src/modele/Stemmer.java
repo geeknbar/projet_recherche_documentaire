@@ -629,7 +629,7 @@ class Stemmer {
 			}
 		}
 
-		writeFileStemmer2("./bin/doc/AP890101_stemmer2.txt");
+		//writeFileStemmer2("./bin/doc/AP890101_stemmer2.txt");
 	}
 
 	/**

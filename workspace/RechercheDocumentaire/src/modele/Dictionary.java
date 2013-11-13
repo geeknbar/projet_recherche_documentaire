@@ -28,7 +28,7 @@ public class Dictionary {
 	
 	public void displayInfos(){
 
-		System.out.println(this.getDictionary().toString());
+		//System.out.println(this.getDictionary().toString());
 		System.out.println("le dictionnaire a une taille de :" + this.getDictionary().size());
 	}
 

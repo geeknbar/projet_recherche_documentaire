@@ -45,17 +45,17 @@ public class Parser {
 		next.add("<HEAD>");
 		next.add("</HEAD>");
 
-		System.out.println("************* File: "+file+" ***********************");
+		//System.out.println("************* File: "+file+" ***********************");
 		try
 		{
 			BufferedReader input = new BufferedReader(new FileReader(file));
 			try
 			{
 				String line = null;
-				while ((line = input.readLine()) != null)
+				while ((line = input.readLine()) != null && !line.replaceAll("[\\s\\p{Punct}]","").trim().isEmpty())
 				{
+					//System.out.println(line);
 					// On split la ligne
-					if(line.trim().isEmpty()) line = input.readLine();
 					StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
 					String firstToken = token.nextToken();
 					for(int i=0; i<next.size(); i++)
@@ -112,9 +112,9 @@ public class Parser {
 
 	public void init(String docPath) {
 		chargerStopWord();
-		System.out.println("******file : "+docPath);
+		//System.out.println("******file : "+docPath);
 		loadfile(docPath);
-		writeFile("./bin/doc/AP890101_parser.txt");
+		//writeFile("./bin/doc/AP890101_parser.txt");
 	}
 
 	public static void writeFile(String path){
