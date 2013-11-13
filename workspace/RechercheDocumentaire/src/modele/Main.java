@@ -32,7 +32,7 @@ public class Main {
 			//if (i==10) break;
 		}
 		long stop = System.currentTimeMillis();
-		dic.writeFileDictionnary("./src/doc/dictionary.txt");
+		dic.writeFileDictionnary("./bin/doc/dictionary.txt");
 		System.out.println(stop - start);
 	}
 
