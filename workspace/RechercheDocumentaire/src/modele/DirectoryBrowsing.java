@@ -1,4 +1,3 @@
-
 package modele;
 
 import java.io.File;
@@ -59,5 +58,5 @@ public class DirectoryBrowsing {
 	public int getI_subdirectory() {
 		return i_subdirectory;
 	}
-	
+
 }
