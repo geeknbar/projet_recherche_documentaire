@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -47,7 +48,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	private JTextArea results;
 	private boolean dictionaryLoad = false;
 	private Query query;
-
+	private JCheckBox isDicLoad;
 	/**
 	 * Launch the application.
 	 */
@@ -139,6 +140,17 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 
 		btn_file = new JButton("File");
 		horizontalBox.add(btn_file);
+		
+		Component horizontalStrut1 = Box.createHorizontalStrut(20);
+		horizontalBox.add(horizontalStrut1);
+		
+		JLabel dictionaryLoad = new JLabel("Dictionary load");
+		horizontalBox.add(dictionaryLoad);
+		
+		isDicLoad = new JCheckBox();
+		isDicLoad.setSelected(false);
+		isDicLoad.setEnabled(false);
+		horizontalBox.add(isDicLoad);
 
 		btn_file.addActionListener(this);
 		btn_load.addActionListener(this);
@@ -203,14 +215,16 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 			loadDictionaryFromPath(pathDictionary.getText());
 			JOptionPane.showMessageDialog(this, "Dictionary load, you can ask a query");
 			dictionaryLoad = true;
+			isDicLoad.setSelected(true);
 		}
 		if (e.getSource() == btn_proceed){
 			results.setText("");
 			if(dictionaryLoad){
 				proceedQuery();
 				String result = query.displayResult();
-				results.append("We find "+ query.getTotalDocFind() +" relative documents for your query");
+				results.append("We find "+ query.getTotalDocFind() +" relative documents for your query. They are classified by relevance\n");
 				results.append(result);
+				results.setCaretPosition(0);
 			}else{
 				JOptionPane.showMessageDialog(this, "Please load a dictionary to proceed query");
 			}
