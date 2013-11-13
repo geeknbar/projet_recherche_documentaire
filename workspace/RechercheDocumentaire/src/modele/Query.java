@@ -73,10 +73,16 @@ public class Query {
 			table.add(entry.getValue());
 		}
 		Collections.sort(table, Collections.reverseOrder());
+		HashMap<String, Integer> temp = new HashMap<String, Integer>();
+		HashMap<String, Integer> temp2 = new HashMap<String, Integer>();
+		temp.putAll(docIdResults);
 		for (Integer i : table) {
-			for (Entry<String, Integer> entry : docIdResults.entrySet()) {
-				if (i == entry.getValue()) {
+			temp2.clear();
+			temp2.putAll(temp);
+			for (Entry<String, Integer> entry : temp2.entrySet()) {
+				if (i == entry.getValue() && !sortResult.contains(entry.getKey())) {
 					sortResult.add(entry.getKey());
+					temp.remove(entry.getKey());
 				}
 			}
 		}
@@ -89,16 +95,17 @@ public class Query {
 	
 	public void displayResult() {
 		System.out.println(sortResult().size());
-		/*for (String s : sortResult()) {
+		for (String s : sortResult()) {
 			System.out.println(s);
-		}*/
+		}
 	}
 
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
 		Query q = new Query();
 		q.loadDictionary("./bin/doc/dictionary.txt");
-		q.queryProcess("politicians talk disparagingly of the ``Vietnam Syndrome''");
+		//q.queryProcess("politicians talk disparagingly of the ``Vietnam Syndrome''");
+		q.queryProcess("syndrome");
 		for (String s : q.stemQuery) {
 			System.out.println(s);
 		}
