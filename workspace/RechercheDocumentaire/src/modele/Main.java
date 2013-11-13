@@ -23,25 +23,20 @@ public class Main {
 		Dictionary dic = new Dictionary();
 		for (String filePath : listCorpus) {
 
-			// System.out.println(filePath);
 			Parser p = new Parser();
 			p.init(filePath);
 			Stemmer s = new Stemmer();
-			// permet de comparer les deux méthodes entre celle qui est donner
-			// par le mec et la notre
-			// il reste un souci avec les mots composés
-			// s.init();
 			s.stemmerArray(p.getLines());
 
-			String docID = "890101" + String.valueOf(i);
-			dic.fillDictionary(s.getStemmerFile2(), docID);
+			String docID = direct.getFileName(filePath);
+			dic.fillDictionary(s.getStemmerFile(), docID);
 			// dic.displayInfos();
-			s.setStemmerFile2(new ArrayList<String>());
+			s.setStemmerFile(new ArrayList<String>());
 			p.setLines(new ArrayList<String>());
 			System.out.println(i);
 			i++;
 			// if (i==50) dic.displayInfos();
-			// if (i==50) break;
+			//if (i==10) break;
 		}
 		long stop = System.currentTimeMillis();
 		writeFileDictionnary("./src/doc/dictionary.txt", dic.getDictionary());

@@ -44,7 +44,6 @@ public class Parser {
 		next.add("<HEAD>");
 		next.add("</HEAD>");
 
-		// System.out.println("************* File: "+file+" ***********************");
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(file));
 			try {

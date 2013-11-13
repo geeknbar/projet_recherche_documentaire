@@ -38,6 +38,11 @@ public class DirectoryBrowsing {
 			filesPath.add(currentFilePath);
 		}
 	}
+	
+	public String getFileName(String path) {
+		String tokens[] = path.split("/");
+		return tokens[tokens.length-1];
+	}
 
 	public String getPath() {
 		return path;
