@@ -46,6 +46,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	private JButton btn_proceed;
 	private JTextArea results;
 	private boolean dictionaryLoad = false;
+	private Query query;
 
 	/**
 	 * Launch the application.
@@ -80,12 +81,10 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		dic.writeFileDictionnary("./bin/doc/dictionary.txt");
 	}
 	
-	public String proceedQuery(){
-		Query q = new Query();
-		q.loadDictionary("./bin/doc/dictionary.txt");
-		q.queryProcess(user_query.getText());
-		String result = q.displayResult();
-		return result;
+	public void proceedQuery(){
+		query = new Query();
+		query.loadDictionary("./bin/doc/dictionary.txt");
+		query.queryProcess(user_query.getText());
 	}
 	/**
 	 * Create the frame.
@@ -206,8 +205,12 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 			dictionaryLoad = true;
 		}
 		if (e.getSource() == btn_proceed){
+			results.setText("");
 			if(dictionaryLoad){
-				results.append( proceedQuery());
+				proceedQuery();
+				String result = query.displayResult();
+				results.append("We find "+ query.getTotalDocFind() +" relative documents for your query");
+				results.append(result);
 			}else{
 				JOptionPane.showMessageDialog(this, "Please load a dictionary to proceed query");
 			}

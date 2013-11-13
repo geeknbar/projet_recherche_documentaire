@@ -19,12 +19,14 @@ public class Query {
 	private HashMap<String, Integer> docIdResults;
 	private ArrayList<String> stemQuery;
 	private Parser parser;
+	private int totalDocFind;
 
 	public Query(){
 		dictionary = new HashMap<String, HashSet<String>>();
 		docIdResults = new HashMap<String, Integer>();
 		stemQuery = new ArrayList<String>();
 		parser = new Parser();
+		totalDocFind=0;
 	}
 
 	public void loadDictionary(String path){
@@ -52,6 +54,7 @@ public class Query {
 	}
 	
 	public void queryProcess(String query) {
+		totalDocFind =0;
 		stemQuery = parser.tokenizeLine(query);
 		for (String word : stemQuery) {
 			if (dictionary.containsKey(word)) {
@@ -94,6 +97,7 @@ public class Query {
 	}
 	
 	public String displayResult() {
+		totalDocFind = sortResult().size();
 		System.out.println(sortResult().size());
 		String result="";
 		for (String s : sortResult()) {
@@ -137,6 +141,10 @@ public class Query {
 
 	public ArrayList<String> getStemQuery() {
 		return stemQuery;
+	}
+
+	public int getTotalDocFind() {
+		return totalDocFind;
 	}
 	
 	
