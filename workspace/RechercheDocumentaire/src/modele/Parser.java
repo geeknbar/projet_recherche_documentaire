@@ -20,6 +20,7 @@ public class Parser {
 	private static ArrayList<String> stopwords;
 	private static ArrayList<String> next;
 	private Stemmer s;
+	private boolean intext;
 	
 	public Parser() {
 		lines = new ArrayList<String>();
@@ -27,6 +28,7 @@ public class Parser {
 		next = new ArrayList<String>();
 		s = new Stemmer();
 		chargerStopWord();
+		intext = false;
 		next.add("</TEXT>");
 		next.add("<DOC>");
 		next.add("</DOC>");
@@ -50,39 +52,13 @@ public class Parser {
 
 	public void loadFile(String file) {
 		lines.clear();
-		boolean intext = false;		
+		intext = false;
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(file));
 			try {
 				String line = null;
 				while ((line = input.readLine()) != null && !line.replaceAll("[\\s\\p{Punct}]", "").trim().isEmpty()) {
-					// System.out.println(line);
-					// On split la ligne
-					StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
-					String firstToken = token.nextToken();
-					for (int i = 0; i < next.size(); i++) {
-						// firstToken.
-						if (firstToken.contains(next.get(i))) {
-							intext = false;
-							break;
-						} else if ("<TEXT>".equals(firstToken)) {
-							intext = true;
-							break;
-						}
-					}
-					if (intext == true && !("<TEXT>".equals(firstToken))) {
-						// System.out.println(firstToken);
-						if (!(stopwords.contains(firstToken.toLowerCase()))) {
-							s.stemmerWord(firstToken);
-						}
-						while (token.hasMoreTokens()) {
-							// System.out.println(token.nextToken());
-							String nextToken = token.nextToken();
-							if (!(stopwords.contains(nextToken.toLowerCase()))) {
-								s.stemmerWord(nextToken);
-							}
-						}
-					}
+					processLine(line);
 				}
 			} finally {
 				input.close();
@@ -91,6 +67,55 @@ public class Parser {
 			System.err.println("Erreur:loadFile(" + file + "):"
 					+ ex.getMessage());
 		}
+	}
+	
+	public void processLine(String line) {
+		// System.out.println(line);
+		// On split la ligne
+		StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
+		String firstToken = token.nextToken();
+		for (int i = 0; i < next.size(); i++) {
+			// firstToken.
+			if (firstToken.contains(next.get(i))) {
+				intext = false;
+				break;
+			} else if ("<TEXT>".equals(firstToken)) {
+				intext = true;
+				break;
+			}
+		}
+		if (intext == true && !("<TEXT>".equals(firstToken))) {
+			// System.out.println(firstToken);
+			if (!(stopwords.contains(firstToken.toLowerCase()))) {
+				s.stemmerWord(firstToken);
+			}
+			while (token.hasMoreTokens()) {
+				// System.out.println(token.nextToken());
+				String nextToken = token.nextToken();
+				if (!(stopwords.contains(nextToken.toLowerCase()))) {
+					s.stemmerWord(nextToken);
+				}
+			}
+		}
+	}
+	
+	public String tokenizeLine(String line) {
+		lines.clear();
+		StringTokenizer tokens = new StringTokenizer(line, " ''``;,.\n\t\r");
+		String word = "";
+		while(tokens.hasMoreTokens()) {
+			word = tokens.nextToken();
+			if(!stopwords.contains(word.toLowerCase())) {
+				s.stemmerWord(word);
+			}
+		}
+		ArrayList<String> stemWords = new ArrayList<String>();
+		stemWords = s.getStemmerFile();
+		String stemQuery = "";
+		for (String s : stemWords) {
+			stemQuery += s + " ";
+		}
+		return stemQuery;
 	}
 
 	public static void chargerStopWord() {

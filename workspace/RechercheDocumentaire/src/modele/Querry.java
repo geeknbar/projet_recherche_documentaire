@@ -15,9 +15,13 @@ import java.util.Map.Entry;
 public class Querry {
 
 	private HashMap<String, HashSet<String>> dictionary;
+	private ArrayList<String> stemQuery;
+	private Parser parser;
 
 	public Querry(){
 		dictionary = new HashMap<String, HashSet<String>>();
+		stemQuery = new ArrayList<String>();
+		parser = new Parser();
 	}
 
 	public void loadDictionary(String path){
@@ -44,6 +48,11 @@ public class Querry {
 			e.printStackTrace();
 		} 
 	}
+	
+	private void queryProcess(String query) {
+		String stemQuery = parser.tokenizeLine(query);
+		System.out.println(stemQuery);
+	}
 
 	public HashMap<String, HashSet<String>> getDictionary() {
 		return dictionary;
@@ -53,9 +62,12 @@ public class Querry {
 		long start = System.currentTimeMillis();
 		Querry q = new Querry();
 		q.loadDictionary("./bin/doc/dictionary.txt");
+		q.queryProcess("politicians talk disparagingly of the ``Vietnam Syndrome''");
+		for (String s : q.stemQuery) {
+			System.out.println(s);
+		}
 		long stop = System.currentTimeMillis();
 		System.out.println(stop - start);
-
 	}
 
 	public void writeFileDictionnary(String path) {
