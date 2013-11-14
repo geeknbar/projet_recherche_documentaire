@@ -72,7 +72,6 @@ public class Query {
 	}
 	
 	public ArrayList<String> searchWord(String word) {
-		parser.clearStemmerFile();
 		ArrayList<String> docIdResult = new ArrayList<String>();
 		if (dictionary.containsKey(word)) {
 			for (String docID : dictionary.get(word)) {
@@ -108,7 +107,8 @@ public class Query {
 		} else if (query.contains("|")) {
 			System.out.println("|");
 			operator = "|";
-			query = query.replaceAll("|", " ");
+			query = query.replaceAll("\\|", " ");
+			System.out.println(query);
 			stemQuery = parser.tokenizeLine(query);
 			p1 = searchWord(stemQuery.get(0));
 			p2 = searchWord(stemQuery.get(1));
