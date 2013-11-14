@@ -102,6 +102,7 @@ public class Parser {
 	 */
 	public ArrayList<String> stemLine(String line) {
 		lines.clear();
+		s.clearStemmerFile();
 		StringTokenizer tokens = new StringTokenizer(line, " ''``;,.\n\t\r");
 		String word = "";
 		while(tokens.hasMoreTokens()) {

@@ -87,14 +87,19 @@ public class Query {
 			String tempQuery = "";
 			while (tokens.hasMoreElements()) {
 				String s = tokens.nextToken();
-
+				
 				if ("&".equals(s)) {
 					tempQuery += s;
 				} else if ("|".equals(s)) {
 					tempQuery += s;
 				} else {
-					tempQuery += s;
-					nbElement++;
+					ArrayList<String> tmp = parser.stemLine(s);
+					if (!tmp.isEmpty()) {
+						tempQuery += s;
+						nbElement++;
+					} else {
+						tempQuery = tempQuery.substring(0, tempQuery.length()-1);
+					}
 				}
 				if (nbElement == 2) {
 					p1 = tempResultQuery(p1, tempQuery);
