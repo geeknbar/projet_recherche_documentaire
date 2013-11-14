@@ -34,11 +34,6 @@ package modele;
 
  */
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -568,24 +563,6 @@ class Stemmer {
 		i = 0;
 	}
 
-	/**
-	 * Permet d'écrire le résultat dans le fichier de stem
-	 * 
-	 * @param path
-	 */
-	public static void writeFileStemmer(String path) {
-		// Path helloPath = Paths.get("./src/doc/AP890101_s5.txt");
-		Path stemmerFilePath = Paths.get(path);
-		try {
-			Files.write(stemmerFilePath, stemmerFile, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("erreur lors du stemming");
-		}
-
-	}
-
 	public void stemmerArray(ArrayList<String> lines) {
 		for (String l : lines) {
 			char[] w = l.toCharArray();
@@ -612,7 +589,6 @@ class Stemmer {
 				}
 			}
 		}
-		// writeFileStemmer("./bin/doc/AP890101_stemmer2.txt");
 	}
 	
 	public void stemmerWord(String word) {
@@ -643,10 +619,6 @@ class Stemmer {
 
 	public ArrayList<String> getStemmerFile() {
 		return stemmerFile;
-	}
-
-	public void setStemmerFile(ArrayList<String> stemmerFile) {
-		Stemmer.stemmerFile = stemmerFile;
 	}
 	
 	public void clearStemmerFile() {

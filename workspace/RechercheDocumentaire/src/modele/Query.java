@@ -57,7 +57,7 @@ public class Query {
 	
 	public void queryProcess(String query) {
 		totalDocFind = 0;
-		stemQuery = parser.tokenizeLine(query);
+		stemQuery = parser.stemLine(query);
 		for (String word : stemQuery) {
 			if (dictionary.containsKey(word)) {
 				for (String docID : dictionary.get(word)) {
@@ -68,6 +68,39 @@ public class Query {
 					}
 				}
 			}
+		}
+	}
+	
+	public void queryProcessBoolean(String query) {
+		docIdResults.clear();
+		docIdResultsBoolean.clear();
+		parser.clearStemmerFile();
+		ArrayList<String> p1 = new ArrayList<String>();
+		ArrayList<String> p2 = new ArrayList<String>();
+
+		String operator = "";
+		if (query.contains("&")) {
+
+			operator = "&";
+			query = query.replaceAll("&", " ");
+			stemQuery = parser.stemLine(query);
+			p1 = searchWord(stemQuery.get(0));
+			p2 = searchWord(stemQuery.get(1));
+		} else if (query.contains("|")) {
+			operator = "|";
+			query = query.replaceAll("\\|", " ");
+			System.out.println(query);
+			stemQuery = parser.stemLine(query);
+			p1 = searchWord(stemQuery.get(0));
+			p2 = searchWord(stemQuery.get(1));
+		} else {
+			queryProcess(query);
+		}
+		
+		switch(operator) {
+			case "": queryProcess(query);break;
+			case "&": docIdResultsBoolean = intersect(p1, p2); totalDocFind = docIdResultsBoolean.size(); break;
+			case "|": docIdResultsBoolean = union(p1, p2); totalDocFind = docIdResultsBoolean.size(); break;
 		}
 	}
 	
@@ -87,39 +120,6 @@ public class Query {
 		}
 		docIdResults.clear();
 		return docIdResult;
-	}
-	
-	public void queryProcessBoolean(String query) {
-		docIdResults.clear();
-		docIdResultsBoolean.clear();
-		parser.clearStemmerFile();
-		ArrayList<String> p1 = new ArrayList<String>();
-		ArrayList<String> p2 = new ArrayList<String>();
-
-		String operator = "";
-		if (query.contains("&")) {
-
-			operator = "&";
-			query = query.replaceAll("&", " ");
-			stemQuery = parser.tokenizeLine(query);
-			p1 = searchWord(stemQuery.get(0));
-			p2 = searchWord(stemQuery.get(1));
-		} else if (query.contains("|")) {
-			operator = "|";
-			query = query.replaceAll("\\|", " ");
-			System.out.println(query);
-			stemQuery = parser.tokenizeLine(query);
-			p1 = searchWord(stemQuery.get(0));
-			p2 = searchWord(stemQuery.get(1));
-		} else {
-			queryProcess(query);
-		}
-		
-		switch(operator) {
-			case "": queryProcess(query);break;
-			case "&": docIdResultsBoolean = intersect(p1, p2); totalDocFind = docIdResultsBoolean.size(); break;
-			case "|": docIdResultsBoolean = union(p1, p2); totalDocFind = docIdResultsBoolean.size(); break;
-		}
 	}
 	
 	public ArrayList<String> intersect(ArrayList<String> p1, ArrayList<String> p2) {
@@ -229,20 +229,6 @@ public class Query {
 		return result;
 	}
 
-//	public static void main(String[] args) {
-//		long start = System.currentTimeMillis();
-//		Query q = new Query();
-//		q.loadDictionary("./bin/doc/dictionary.txt");
-//		//q.queryProcess("politicians talk disparagingly of the ``Vietnam Syndrome''");
-//		q.queryProcess("syndrome");
-//		for (String s : q.stemQuery) {
-//			System.out.println(s);
-//		}
-//		q.displayResult();
-//		long stop = System.currentTimeMillis();
-//		System.out.println(stop - start);
-//	}
-
 	public void writeFileDictionnary(String path) {
 		Path stemmerFilePath = Paths.get(path);
 		ArrayList<String> arrayDic = new ArrayList<>();
@@ -255,22 +241,14 @@ public class Query {
 		try {
 			Files.write(stemmerFilePath, arrayDic, Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("erreur lors du stemming");
 		}
 
 	}
 
-	public ArrayList<String> getStemQuery() {
-		return stemQuery;
-	}
-
 	public int getTotalDocFind() {
 		return totalDocFind;
-	}
-	public ArrayList<String> getDocIdResultsBoolean() {
-		return docIdResultsBoolean;
 	}
 	
 }

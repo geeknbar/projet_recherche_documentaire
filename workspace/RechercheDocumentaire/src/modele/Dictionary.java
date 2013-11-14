@@ -58,9 +58,8 @@ public class Dictionary {
 		try {
 			Files.write(stemmerFilePath, arrayDic, Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("erreur lors du stemming");
+			System.out.println("Erreur lors du stemming");
 		}
 
 	}
