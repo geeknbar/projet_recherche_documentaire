@@ -55,10 +55,11 @@ class Stemmer {
 	i_end, /* offset to end of stemmed word */
 	j, k;
 	private static final int INC = 50;
-	private static ArrayList<String> stemmerFile = new ArrayList<>();
+	private static ArrayList<String> stemmerFile;
 
 	/* unit of size whereby b is increased */
 	public Stemmer() {
+		stemmerFile = new ArrayList<String>();
 		b = new char[INC];
 		i = 0;
 		i_end = 0;

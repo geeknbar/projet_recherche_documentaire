@@ -83,14 +83,17 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	}
 	
 	public void proceedQuery(){
-		query = new Query();
-		query.loadDictionary("./bin/doc/dictionary.txt");
-		query.queryProcess(user_query.getText());
+		query.queryProcessBoolean(user_query.getText());
 	}
 	/**
 	 * Create the frame.
 	 */
 	public UIRechercheDoc() {
+		
+		query = new Query();
+		query.loadDictionary("./bin/doc/dictionary.txt");
+		dictionaryLoad = true;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 453);
 		contentPane = new JPanel();
@@ -163,7 +166,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		Box horizontalBox_1 = Box.createHorizontalBox();
 		panel_querry.add(horizontalBox_1);
 
-		JLabel lblNewLabel_1 = new JLabel("Please enter your querry");
+		JLabel lblNewLabel_1 = new JLabel("Please enter your query");
 		horizontalBox_1.add(lblNewLabel_1);
 
 		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
