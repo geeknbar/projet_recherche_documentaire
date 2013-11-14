@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 
 /**
  * Classe Dictionary.
+ * @author Dorian Coffinet
+ * @author Thibault Gauthier
+ * @author Yassine Badih
  */
 public class Dictionary {
 

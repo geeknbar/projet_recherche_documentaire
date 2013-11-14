@@ -36,7 +36,10 @@ import modele.Query;
 public class UIRechercheDoc extends JFrame implements ActionListener {
 
 	/**
-	 * 
+	 * Classe pour l'IU
+	 * @author Dorian Coffinet
+	 * @author Thibault Gauthier
+	 * @author Yassine Badih
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -83,7 +86,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		}
 		dic.writeFileDictionnary("./bin/doc/dictionary.txt");
 	}
-	
+
 	public void proceedQuery(){
 		query.queryProcessBoolean(user_query.getText());
 	}
@@ -91,9 +94,9 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public UIRechercheDoc() {
-		
+
 		query = new Query();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 453);
 		contentPane = new JPanel();
@@ -107,7 +110,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 
 		btn_create = new JButton("Create Dictionary");
 		panel_action.add(btn_create);
-		
+
 		btn_load = new JButton("Load Dictionary");
 
 		panel_action.add(btn_load);
@@ -148,13 +151,13 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 
 		btn_file = new JButton("File");
 		horizontalBox.add(btn_file);
-		
+
 		Component horizontalStrut1 = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut1);
-		
+
 		JLabel dictionaryLoad = new JLabel("Dictionary load");
 		horizontalBox.add(dictionaryLoad);
-		
+
 		isDicLoad = new JCheckBox();
 		isDicLoad.setSelected(false);
 		isDicLoad.setEnabled(false);
@@ -164,17 +167,17 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		btn_create.addActionListener(this);
 		btn_proceed.addActionListener(this);
 		btn_load.addActionListener(this);
-		
+
 		JPanel panel = new JPanel();
 		panel_corpus_querry.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		
+
 		Box horizontalBox_4 = Box.createHorizontalBox();
 		panel.add(horizontalBox_4);
-		
+
 		JLabel lblFilePathDictionary = new JLabel("File Path Dictionary");
 		horizontalBox_4.add(lblFilePathDictionary);
-		
+
 		pathDictionary = new JTextField();
 		pathDictionary.setText("./bin/doc/dictionary.txt");
 		horizontalBox_4.add(pathDictionary);
@@ -215,9 +218,9 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 
 
 		results = new JTextArea();
-	    results.setEditable(false); // set textArea non-editable
-	    JScrollPane scroll = new JScrollPane(results);
-	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		results.setEditable(false); // set textArea non-editable
+		JScrollPane scroll = new JScrollPane(results);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		horizontalBox_3.add(scroll);
 	}

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 /**
  * Classe DirectoryBrowsing.
+ * @author Dorian Coffinet
+ * @author Thibault Gauthier
+ * @author Yassine Badih
  */
 public class DirectoryBrowsing {
 

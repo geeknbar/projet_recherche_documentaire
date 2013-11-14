@@ -12,6 +12,9 @@ import java.util.StringTokenizer;
 
 /**
  * Classe Parser.
+ * @author Dorian Coffinet
+ * @author Thibault Gauthier
+ * @author Yassine Badih
  */
 public class Parser {
 

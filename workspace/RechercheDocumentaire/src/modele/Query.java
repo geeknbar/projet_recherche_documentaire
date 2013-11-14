@@ -11,6 +11,9 @@ import java.util.Map.Entry;
 
 /**
  * Classe Query.
+ * @author Dorian Coffinet
+ * @author Thibault Gauthier
+ * @author Yassine Badih
  */
 public class Query {
 
