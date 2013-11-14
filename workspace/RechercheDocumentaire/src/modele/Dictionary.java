@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 
 /**
- * Classe dictionnaire.
+ * Classe Dictionary.
  */
 public class Dictionary {
 
@@ -21,7 +21,7 @@ public class Dictionary {
 	private HashMap<String, HashSet<String>> dictionary;
 
 	/**
-	 * Constructeur de la classe dictionnaire.
+	 * Constructeur de la classe Dictionary.
 	 */
 	public Dictionary() {
 		dictionary = new HashMap<String, HashSet<String>>();
@@ -39,7 +39,7 @@ public class Dictionary {
 	}
 
 	/**
-	 * Méthode pour ajouter un mot dans le dictionnaire
+	 * Méthode pour ajouter un mot dans le dictionnaire.
 	 * @param word Mot à ajouter.
 	 * @param docID Nom du document en traitement.
 	 */
