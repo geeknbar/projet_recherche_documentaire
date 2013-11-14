@@ -28,7 +28,7 @@ public class Query {
 		docIdResultsBoolean = new ArrayList<String>();
 		stemQuery = new ArrayList<String>();
 		parser = new Parser();
-		totalDocFind=0;
+		totalDocFind = 0;
 	}
 
 	public void loadDictionary(String path){
@@ -56,7 +56,6 @@ public class Query {
 	}
 	
 	public void queryProcess(String query) {
-		totalDocFind = 0;
 		stemQuery = parser.stemLine(query);
 		for (String word : stemQuery) {
 			if (dictionary.containsKey(word)) {
@@ -89,7 +88,6 @@ public class Query {
 		} else if (query.contains("|")) {
 			operator = "|";
 			query = query.replaceAll("\\|", " ");
-			System.out.println(query);
 			stemQuery = parser.stemLine(query);
 			p1 = searchWord(stemQuery.get(0));
 			p2 = searchWord(stemQuery.get(1));
@@ -99,8 +97,8 @@ public class Query {
 		
 		switch(operator) {
 			case "": queryProcess(query);break;
-			case "&": docIdResultsBoolean = intersect(p1, p2); totalDocFind = docIdResultsBoolean.size(); break;
-			case "|": docIdResultsBoolean = union(p1, p2); totalDocFind = docIdResultsBoolean.size(); break;
+			case "&": docIdResultsBoolean = intersect(p1, p2); break;
+			case "|": docIdResultsBoolean = union(p1, p2); break;
 		}
 	}
 	
@@ -214,18 +212,18 @@ public class Query {
 	public String displayResult() {
 		String result = "";
 		if (docIdResults.size() > 0) {
-			totalDocFind = sortResult().size();
+			totalDocFind = docIdResults.size();
 			for (String s : sortResult()) {
 				result = result + s+ "\n";
 			}
 		} else if (docIdResultsBoolean.size() > 0) {
+			totalDocFind = docIdResultsBoolean.size();
 			for (String s : docIdResultsBoolean) {
 				result = result + s + "\n";
 			}
 		} else {
 			return "\nError in displayResult()\n";
 		}
-		
 		return result;
 	}
 

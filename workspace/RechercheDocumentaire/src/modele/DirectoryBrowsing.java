@@ -45,5 +45,4 @@ public class DirectoryBrowsing {
 	public ArrayList<String> getFilesPath() {
 		return filesPath;
 	}
-
 }

@@ -22,7 +22,6 @@ public class Dictionary {
 		for (String word : stemmerFile) {
 			this.addWord(word, docID);
 		}
-
 	}
 
 	public void addWord(String word, String docID) {	
@@ -33,17 +32,6 @@ public class Dictionary {
 			values.add(docID);
 			dictionary.put(word, values);
 		}
-	}
-
-	public HashMap<String, HashSet<String>> getDictionary() {
-		return dictionary;
-	}
-
-	public void displayInfos() {
-
-		System.out.println(this.getDictionary().toString());
-		System.out.println("le dictionnaire a une taille de :"
-				+ this.getDictionary().size());
 	}
 	
 	public void writeFileDictionnary(String path) {
@@ -61,7 +49,5 @@ public class Dictionary {
 			e.printStackTrace();
 			System.out.println("Erreur lors du stemming");
 		}
-
 	}
-
 }

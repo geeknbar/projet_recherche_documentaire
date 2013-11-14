@@ -17,41 +17,23 @@ public class Parser {
 	 */
 	private static ArrayList<String> lines;
 	private static ArrayList<String> stopwords;
-	private static ArrayList<String> next;
 	private Stemmer s;
-	private boolean intext;
 	
+	@SuppressWarnings("serial")
 	public Parser() {
+		
 		lines = new ArrayList<String>();
-		stopwords = new ArrayList<String>();
-		next = new ArrayList<String>();
+		stopwords = new ArrayList<String>() {{
+			add("</TEXT>");add("<DOC>");add("</DOC>");add("<DOCNO>");add("</DOCNO>");add("<FILIED>");
+			add("</FILIED>");add("<FIRST>");add("</FIRST>");add("<SECOND>");add("</SECOND>");add("<HEAD>");
+			add("</HEAD>");add("<BYLINE>");add("</BYLINE>");add("<DATELINE>");add("</DATELINE>");add("<HEAD>");add("</HEAD>");}};
+		
 		s = new Stemmer();
-		loadStopWords();
-		intext = false;
-		next.add("</TEXT>");
-		next.add("<DOC>");
-		next.add("</DOC>");
-		next.add("<DOCNO>");
-		next.add("</DOCNO>");
-		next.add("<FILIED>");
-		next.add("</FILIED>");
-		next.add("<FIRST>");
-		next.add("</FIRST>");
-		next.add("<SECOND>");
-		next.add("</SECOND>");
-		next.add("<HEAD>");
-		next.add("</HEAD>");
-		next.add("<BYLINE>");
-		next.add("</BYLINE>");
-		next.add("<DATELINE>");
-		next.add("</DATELINE>");
-		next.add("<HEAD>");
-		next.add("</HEAD>");
+		loadStopWords();	
 	}
 
 	public void loadFile(String file) {
 		lines.clear();
-		intext = false;
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(file));
 			try {
@@ -80,28 +62,13 @@ public class Parser {
 	}
 	
 	public void processLine(String line) {
-		StringTokenizer token = new StringTokenizer(line, " ''``;,.\n\t\r");
-		String firstToken = token.nextToken();
-		for (int i = 0; i < next.size(); i++) {
-			if (firstToken.contains(next.get(i))) {
-				intext = false;
-				break;
-			} else if ("<TEXT>".equals(firstToken)) {
-				intext = true;
-				break;
+		StringTokenizer tokens = new StringTokenizer(line, " ''``;,.\n\t\r");
+		while (tokens.hasMoreTokens()) {
+			String token = tokens.nextToken();
+			if (!(stopwords.contains(token.toLowerCase()))) {
+				s.stemmerWord(token);
 			}
-		}
-		if (intext == true && !("<TEXT>".equals(firstToken))) {
-			if (!(stopwords.contains(firstToken.toLowerCase()))) {
-				s.stemmerWord(firstToken);
-			}
-			while (token.hasMoreTokens()) {
-				String nextToken = token.nextToken();
-				if (!(stopwords.contains(nextToken.toLowerCase()))) {
-					s.stemmerWord(nextToken);
-				}
-			}
-		}
+		}	
 	}
 	
 	public ArrayList<String> stemLine(String line) {
