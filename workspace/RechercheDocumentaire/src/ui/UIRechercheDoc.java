@@ -250,7 +250,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 			if(dictionaryLoad){
 				proceedQuery();
 				String result = query.displayResult();
-				results.append("We find "+ query.getTotalDocFind() +" relative documents for your query. They are classified by relevance\n");
+				results.append("We find "+ query.getTotalDocFind() +" relative documents for your query.\n");
 				results.append(result);
 				results.setCaretPosition(0);
 			}else{
