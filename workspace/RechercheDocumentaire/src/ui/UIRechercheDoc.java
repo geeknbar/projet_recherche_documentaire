@@ -40,15 +40,17 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField pathDictionary;
+	private JTextField pathCorpus;
 	private JTextField user_query;
 	private JButton btn_file;
-	private JButton btn_load;
+	private JButton btn_create;
 	private JButton btn_proceed;
+	private JButton btn_load;
 	private JTextArea results;
 	private boolean dictionaryLoad = false;
 	private Query query;
 	private JCheckBox isDicLoad;
+	private JTextField pathDictionary;
 	/**
 	 * Launch the application.
 	 */
@@ -65,7 +67,7 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		});
 	}
 
-	public void loadDictionaryFromPath(String path){
+	public void createDictionaryFromCorpus(String path){
 		DirectoryBrowsing direct = new DirectoryBrowsing(path);
 		direct.loadFiles();
 		ArrayList<String> listCorpus = direct.getFilesPath();
@@ -91,8 +93,6 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 	public UIRechercheDoc() {
 		
 		query = new Query();
-		query.loadDictionary("./bin/doc/dictionary.txt");
-		dictionaryLoad = true;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 453);
@@ -105,7 +105,11 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		contentPane.add(panel_action, BorderLayout.SOUTH);
 		panel_action.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
+		btn_create = new JButton("Create Dictionary");
+		panel_action.add(btn_create);
+		
 		btn_load = new JButton("Load Dictionary");
+
 		panel_action.add(btn_load);
 
 		btn_proceed = new JButton("Proceed Query");
@@ -134,9 +138,10 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut);
 
-		pathDictionary = new JTextField();
-		horizontalBox.add(pathDictionary);
-		pathDictionary.setColumns(10);
+		pathCorpus = new JTextField();
+		pathCorpus.setText("./bin/corpus");
+		horizontalBox.add(pathCorpus);
+		pathCorpus.setColumns(10);
 
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut_2);
@@ -156,8 +161,24 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 		horizontalBox.add(isDicLoad);
 
 		btn_file.addActionListener(this);
-		btn_load.addActionListener(this);
+		btn_create.addActionListener(this);
 		btn_proceed.addActionListener(this);
+		btn_load.addActionListener(this);
+		
+		JPanel panel = new JPanel();
+		panel_corpus_querry.add(panel, BorderLayout.CENTER);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		
+		Box horizontalBox_4 = Box.createHorizontalBox();
+		panel.add(horizontalBox_4);
+		
+		JLabel lblFilePathDictionary = new JLabel("File Path Dictionary");
+		horizontalBox_4.add(lblFilePathDictionary);
+		
+		pathDictionary = new JTextField();
+		pathDictionary.setText("./bin/doc/dictionary.txt");
+		horizontalBox_4.add(pathDictionary);
+		pathDictionary.setColumns(10);
 
 		JPanel panel_querry = new JPanel();
 		panel_corpus_querry.add(panel_querry, BorderLayout.SOUTH);
@@ -211,16 +232,17 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			chooser.setAcceptAllFileFilterUsed(false); 
 			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
-				pathDictionary.setText(chooser.getSelectedFile().toString());
+				pathCorpus.setText(chooser.getSelectedFile().toString());
 			}
 		}
-		if (e.getSource() == btn_load){
-			loadDictionaryFromPath(pathDictionary.getText());
+		if (e.getSource() == btn_create) {
+			createDictionaryFromCorpus(pathCorpus.getText());
+			query.loadDictionary("./bin/doc/dictionary.txt");
 			JOptionPane.showMessageDialog(this, "Dictionary load, you can ask a query");
 			dictionaryLoad = true;
 			isDicLoad.setSelected(true);
 		}
-		if (e.getSource() == btn_proceed){
+		if (e.getSource() == btn_proceed) {
 			results.setText("");
 			if(dictionaryLoad){
 				proceedQuery();
@@ -232,7 +254,11 @@ public class UIRechercheDoc extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Please load a dictionary to proceed query");
 			}
 		}
-
+		if (e.getSource() == btn_load) {
+			query.loadDictionary("./bin/doc/dictionary.txt");
+			dictionaryLoad = true;
+			isDicLoad.setSelected(true);
+		}
 	}
 
 }
