@@ -562,35 +562,11 @@ class Stemmer {
 		i_end = k + 1;
 		i = 0;
 	}
-
-	public void stemmerArray(ArrayList<String> lines) {
-		for (String l : lines) {
-			char[] w = l.toCharArray();
-			int j = 0;
-			for (int i = 0; i < w.length; i++) {
-				if (Character.isLetter((char) w[i])) {
-					w[i] = Character.toLowerCase((char) w[i]);
-					w[j] = (char) w[i];
-					if (j < 500) {
-						j++;
-					}
-				}
-				if (i == w.length - 1) {
-					/* to test add(char ch) */
-					for (int c = 0; c < j; c++) {
-						this.add(w[c]);
-					}
-					this.stem();
-					String wordStemmer = new String(this.getResultBuffer(), 0,
-							this.getResultLength());
-					if (!(wordStemmer.equals(""))) {
-						stemmerFile.add(wordStemmer);
-					}
-				}
-			}
-		}
-	}
 	
+	/**
+	 * Méthode pour stemmer un mot et l'ajouter à la liste stemmerFile.
+	 * @param word Mot à stemmer.
+	 */
 	public void stemmerWord(String word) {
 		char[] w = word.toCharArray();
 		int j = 0;
@@ -624,5 +600,4 @@ class Stemmer {
 	public void clearStemmerFile() {
 		stemmerFile.clear();
 	}
-
 }
