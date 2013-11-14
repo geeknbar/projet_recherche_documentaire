@@ -3,16 +3,15 @@ package modele;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+/**
+ * Classe Query.
+ */
 public class Query {
 
 	private HashMap<String, HashSet<String>> dictionary;
@@ -22,7 +21,10 @@ public class Query {
 	private Parser parser;
 	private int totalDocFind;
 
-	public Query(){
+	/**
+	 * Constructeur de la classe Query.
+	 */
+	public Query() {
 		dictionary = new HashMap<String, HashSet<String>>();
 		docIdResults = new HashMap<String, Integer>();
 		docIdResultsBoolean = new ArrayList<String>();
@@ -31,7 +33,11 @@ public class Query {
 		totalDocFind = 0;
 	}
 
-	public void loadDictionary(String path){
+	/**
+	 * Méthode pour charger le dictionnaire.
+	 * @param path Chemin du dictionnaire.
+	 */
+	public void loadDictionary(String path) {
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(path));
 			String line;
@@ -50,26 +56,15 @@ public class Query {
 			}
 			input.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
 	
-	public void queryProcess(String query) {
-		stemQuery = parser.stemLine(query);
-		for (String word : stemQuery) {
-			if (dictionary.containsKey(word)) {
-				for (String docID : dictionary.get(word)) {
-					if (docIdResults.containsKey(docID)) {
-						docIdResults.put(docID, docIdResults.get(docID) + 1);
-					} else {
-						docIdResults.put(docID, 1);
-					}
-				}
-			}
-		}
-	}
-	
+	/**
+	 * Méthode pour traiter une Query.
+	 * Elle appelle les méthodes searchWord, queryProcess, intersect et union.
+	 * @param query Query à traiter.
+	 */
 	public void queryProcessBoolean(String query) {
 		docIdResults.clear();
 		docIdResultsBoolean.clear();
@@ -102,6 +97,30 @@ public class Query {
 		}
 	}
 	
+	/**
+	 * Méthode pour traiter une query simple (sans AND ni OR)
+	 * @param query Query à traiter.
+	 */
+	public void queryProcess(String query) {
+		stemQuery = parser.stemLine(query);
+		for (String word : stemQuery) {
+			if (dictionary.containsKey(word)) {
+				for (String docID : dictionary.get(word)) {
+					if (docIdResults.containsKey(docID)) {
+						docIdResults.put(docID, docIdResults.get(docID) + 1);
+					} else {
+						docIdResults.put(docID, 1);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Méthode pour chercher les documents dans lesquels apparait le mot.
+	 * @param word Mot à chercher.
+	 * @return Retourne la liste des documents dans lesquels se trouve le mot.
+	 */
 	public ArrayList<String> searchWord(String word) {
 		ArrayList<String> docIdResult = new ArrayList<String>();
 		if (dictionary.containsKey(word)) {
@@ -120,6 +139,12 @@ public class Query {
 		return docIdResult;
 	}
 	
+	/**
+	 * Méthode pour faire l'intersection de deux listes.
+	 * @param p1 Liste 1.
+	 * @param p2 Liste 2.
+	 * @return Retourne la liste d'intersection des deux listes.
+	 */
 	public ArrayList<String> intersect(ArrayList<String> p1, ArrayList<String> p2) {
 		ArrayList<String> answer = new ArrayList<String>();
 		Collections.sort(p1);
@@ -146,6 +171,12 @@ public class Query {
 		return answer;
 	}
 	
+	/**
+	 * Méthode pour faire l'union de deux listes.
+	 * @param x Liste 1.
+	 * @param y Liste 2.
+	 * @return Retourne la liste d'union des deux listes.
+	 */
 	public ArrayList<String> union(ArrayList<String> x, ArrayList<String> y) {
 		ArrayList<String> answer = new ArrayList<String>();
 		Collections.sort(x);
@@ -182,6 +213,10 @@ public class Query {
 		return answer;
 	}
 	
+	/**
+	 * Méthode pour trier le résultat de la méthode queryProcess.
+	 * @return Retourne le résultat trier par ordre d'importance des documents.
+	 */
 	public ArrayList<String> sortResult() {
 		ArrayList<String> sortResult = new ArrayList<String>();
 		ArrayList<Integer> table = new ArrayList<Integer>();
@@ -204,11 +239,11 @@ public class Query {
 		}
 		return sortResult;
 	}
-
-	public HashMap<String, HashSet<String>> getDictionary() {
-		return dictionary;
-	}
 	
+	/**
+	 * Méthode pour afficher les résultats.
+	 * @return Retourne une chaine contenant les noms de documents recherchés.
+	 */
 	public String displayResult() {
 		String result = "";
 		if (docIdResults.size() > 0) {
@@ -225,24 +260,6 @@ public class Query {
 			return "\nError in displayResult()\n";
 		}
 		return result;
-	}
-
-	public void writeFileDictionnary(String path) {
-		Path stemmerFilePath = Paths.get(path);
-		ArrayList<String> arrayDic = new ArrayList<>();
-		for (Entry<String, HashSet<String>> entry : dictionary.entrySet()) {
-			String cle = entry.getKey();
-			HashSet<String> valeur = entry.getValue();
-			String wordDocId = cle + valeur.toString();
-			arrayDic.add(wordDocId);
-		}
-		try {
-			Files.write(stemmerFilePath, arrayDic, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("erreur lors du stemming");
-		}
-
 	}
 
 	public int getTotalDocFind() {
