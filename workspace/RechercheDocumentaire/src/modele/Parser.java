@@ -10,16 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ * Classe Parser.
+ */
 public class Parser {
 
 	/**
-	 * @param args
+	 * Variables static pour le traitement des stopwords et des lignes.
 	 */
 	private static ArrayList<String> lines;
 	private static ArrayList<String> stopwords;
-	private Stemmer s;
 	
+	/**
+	 * Variable Stemmer.
+	 */
+	private Stemmer s;
+
 	@SuppressWarnings("serial")
+	/**
+	 * Constructeur de la classe Parser.
+	 */
 	public Parser() {
 		
 		lines = new ArrayList<String>();
@@ -32,6 +42,10 @@ public class Parser {
 		loadStopWords();	
 	}
 
+	/**
+	 * Méthode pour charger un fichier.
+	 * @param file Chemin du fichier à charger.
+	 */
 	public void loadFile(String file) {
 		lines.clear();
 		try {
@@ -49,6 +63,9 @@ public class Parser {
 		}
 	}
 	
+	/**
+	 * Méthode pour charger les StopWords.
+	 */
 	public void loadStopWords() {
 		List<String> lignes = null;
 		try {
@@ -61,6 +78,10 @@ public class Parser {
 		}
 	}
 	
+	/**
+	 * Méthode pour traiter une ligne d'un fichier.
+	 * @param line Ligne à traiter.
+	 */
 	public void processLine(String line) {
 		StringTokenizer tokens = new StringTokenizer(line, " ''``;,.\n\t\r");
 		while (tokens.hasMoreTokens()) {
@@ -71,6 +92,11 @@ public class Parser {
 		}	
 	}
 	
+	/**
+	 * Méthode pour stemmer les mots d'une query.
+	 * @param line Contient la query de l'utilisateur.
+	 * @return Retourne la query stemmée.
+	 */
 	public ArrayList<String> stemLine(String line) {
 		lines.clear();
 		StringTokenizer tokens = new StringTokenizer(line, " ''``;,.\n\t\r");
@@ -91,5 +117,4 @@ public class Parser {
 	public void clearStemmerFile() {
 		s.clearStemmerFile();
 	}
-
 }
