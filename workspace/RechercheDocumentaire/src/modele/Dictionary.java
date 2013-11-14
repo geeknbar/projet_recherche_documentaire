@@ -10,20 +10,39 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+/**
+ * Classe dictionnaire.
+ */
 public class Dictionary {
 
+	/**
+	 * Variable pour stocker le dictionnaire.
+	 */
 	private HashMap<String, HashSet<String>> dictionary;
 
+	/**
+	 * Constructeur de la classe dictionnaire.
+	 */
 	public Dictionary() {
 		dictionary = new HashMap<String, HashSet<String>>();
 	}
 
+	/**
+	 * Méthode pour remplir le dictionnaire.
+	 * @param stemmerFile Liste des mots stemmés à ajouter.
+	 * @param docID Nom du document en traitement.
+	 */
 	public void fillDictionary(ArrayList<String> stemmerFile, String docID) {
 		for (String word : stemmerFile) {
 			this.addWord(word, docID);
 		}
 	}
 
+	/**
+	 * Méthode pour ajouter un mot dans le dictionnaire
+	 * @param word Mot à ajouter.
+	 * @param docID Nom du document en traitement.
+	 */
 	public void addWord(String word, String docID) {	
 		if (dictionary.containsKey(word)) {
 			dictionary.get(word).add(docID);
@@ -34,6 +53,10 @@ public class Dictionary {
 		}
 	}
 	
+	/**
+	 * Méthode pour écrire le dictionnaire dans un fichier.
+	 * @param path Chemin du fichier pour écrire le dictionnaire.
+	 */
 	public void writeFileDictionnary(String path) {
 		Path stemmerFilePath = Paths.get(path);
 		ArrayList<String> arrayDic = new ArrayList<>();
