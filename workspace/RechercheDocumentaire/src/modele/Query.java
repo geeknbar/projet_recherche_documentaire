@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.StringTokenizer;
 import java.util.Map.Entry;
 
 /**
  * Classe Query.
+ * 
  * @author Dorian Coffinet
  * @author Thibault Gauthier
  * @author Yassine Badih
@@ -38,7 +40,9 @@ public class Query {
 
 	/**
 	 * Méthode pour charger le dictionnaire.
-	 * @param path Chemin du dictionnaire.
+	 * 
+	 * @param path
+	 *            Chemin du dictionnaire.
 	 */
 	public void loadDictionary(String path) {
 		try {
@@ -48,7 +52,7 @@ public class Query {
 				String[] parts = line.split("\\[");
 				String words = parts[0];
 				String docIDs = parts[1];
-				docIDs=docIDs.replaceAll("\\]", "").trim();
+				docIDs = docIDs.replaceAll("\\]", "").trim();
 				String[] docIDsparse = docIDs.split(",");
 				HashSet<String> docIdValues = new HashSet<String>();
 
@@ -60,49 +64,128 @@ public class Query {
 			input.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
-	
+
 	/**
-	 * Méthode pour traiter une Query.
-	 * Elle appelle les méthodes searchWord, queryProcess, intersect et union.
-	 * @param query Query à traiter.
+	 * Méthode pour traiter une Query. Elle appelle les méthodes searchWord,
+	 * queryProcess, intersect et union.
+	 * 
+	 * @param query
+	 *            Query à traiter.
 	 */
 	public void queryProcessBoolean(String query) {
 		docIdResults.clear();
 		docIdResultsBoolean.clear();
 		parser.clearStemmerFile();
 		ArrayList<String> p1 = new ArrayList<String>();
-		ArrayList<String> p2 = new ArrayList<String>();
+		query = query.trim().replaceAll("&", " & ");
+		query = query.trim().replaceAll("\\|", " \\| ");
+		if (query.contains("&") || query.contains("|")) {
+			StringTokenizer tokens = new StringTokenizer(query, " ");
+			int nbElement = 0;
+			String tempQuery = "";
+			while (tokens.hasMoreElements()) {
+				String s = tokens.nextToken();
 
-		String operator = "";
-		if (query.contains("&")) {
+				if ("&".equals(s)) {
+					tempQuery += s;
+				} else if ("|".equals(s)) {
+					tempQuery += s;
+				} else {
+					tempQuery += s;
+					nbElement++;
+				}
+				if (nbElement == 2) {
+					p1 = tempResultQuery(p1, tempQuery);
+					nbElement = 1;
+					tempQuery = "";
+				}
 
-			operator = "&";
-			query = query.replaceAll("&", " ");
-			stemQuery = parser.stemLine(query);
-			p1 = searchWord(stemQuery.get(0));
-			p2 = searchWord(stemQuery.get(1));
-		} else if (query.contains("|")) {
-			operator = "|";
-			query = query.replaceAll("\\|", " ");
-			stemQuery = parser.stemLine(query);
-			p1 = searchWord(stemQuery.get(0));
-			p2 = searchWord(stemQuery.get(1));
+			}
+			docIdResultsBoolean = p1;
 		} else {
 			queryProcess(query);
 		}
-		
-		switch(operator) {
-			case "": queryProcess(query);break;
-			case "&": docIdResultsBoolean = intersect(p1, p2); break;
-			case "|": docIdResultsBoolean = union(p1, p2); break;
-		}
+
 	}
-	
+
+	public ArrayList<String> tempResultQuery(ArrayList<String> temp,
+			String query) {
+		ArrayList<String> tempResults = new ArrayList<String>();
+
+		if (temp.isEmpty()) {
+			docIdResults.clear();
+			docIdResultsBoolean.clear();
+			parser.clearStemmerFile();
+			ArrayList<String> p1 = new ArrayList<String>();
+			ArrayList<String> p2 = new ArrayList<String>();
+
+			String operator = "";
+			if (query.contains("&")) {
+				operator = "&";
+				query = query.replaceAll("&", " ");
+				stemQuery = parser.stemLine(query);
+				String q1 = stemQuery.get(0);
+				String q2 = stemQuery.get(1);
+				p1 = searchWord(q1);
+				p2 = searchWord(q2);
+			} else if (query.contains("|")) {
+				operator = "|";
+				query = query.replaceAll("\\|", " ");
+				stemQuery = parser.stemLine(query);
+				String q1 = stemQuery.get(0);
+				String q2 = stemQuery.get(1);
+				p1 = searchWord(q1);
+				p2 = searchWord(q2);
+			}
+
+			switch (operator) {
+			case "&":
+				docIdResultsBoolean = intersect(p1, p2);
+				break;
+			case "|":
+				docIdResultsBoolean = union(p1, p2);
+				break;
+			}
+			tempResults.addAll(docIdResultsBoolean);
+		} else {
+			docIdResults.clear();
+			docIdResultsBoolean.clear();
+			parser.clearStemmerFile();
+			ArrayList<String> p1 = temp;
+			ArrayList<String> p2 = new ArrayList<String>();
+			String operator = "";
+			if (query.contains("&")) {
+				operator = "&";
+				query = query.replaceAll("&", " ");
+				stemQuery = parser.stemLine(query);
+				p2 = searchWord(stemQuery.get(0));
+			} else if (query.contains("|")) {
+				operator = "|";
+				query = query.replaceAll("\\|", " ");
+				stemQuery = parser.stemLine(query);
+				p2 = searchWord(stemQuery.get(0));
+			}
+
+			switch (operator) {
+			case "&":
+				docIdResultsBoolean = intersect(p1, p2);
+				break;
+			case "|":
+				docIdResultsBoolean = union(p1, p2);
+				break;
+			}
+			tempResults.addAll(docIdResultsBoolean);
+		}
+		return tempResults;
+	}
+
 	/**
 	 * Méthode pour traiter une query simple (sans AND ni OR)
-	 * @param query Query à traiter.
+	 * 
+	 * @param query
+	 *            Query à traiter.
 	 */
 	public void queryProcess(String query) {
 		stemQuery = parser.stemLine(query);
@@ -118,10 +201,12 @@ public class Query {
 			}
 		}
 	}
-	
+
 	/**
 	 * Méthode pour chercher les documents dans lesquels apparait le mot.
-	 * @param word Mot à chercher.
+	 * 
+	 * @param word
+	 *            Mot à chercher.
 	 * @return Retourne la liste des documents dans lesquels se trouve le mot.
 	 */
 	public ArrayList<String> searchWord(String word) {
@@ -141,25 +226,32 @@ public class Query {
 		docIdResults.clear();
 		return docIdResult;
 	}
-	
+
 	/**
 	 * Méthode pour faire l'intersection de deux listes.
-	 * @param p1 Liste 1.
-	 * @param p2 Liste 2.
+	 * 
+	 * @param p1
+	 *            Liste 1.
+	 * @param p2
+	 *            Liste 2.
 	 * @return Retourne la liste d'intersection des deux listes.
 	 */
-	public ArrayList<String> intersect(ArrayList<String> p1, ArrayList<String> p2) {
+	public ArrayList<String> intersect(ArrayList<String> p1,
+			ArrayList<String> p2) {
 		ArrayList<String> answer = new ArrayList<String>();
 		Collections.sort(p1);
 		Collections.sort(p2);
 		String docId1, docId2;
 		boolean isUndermost;
-		
-		while(!p1.isEmpty() && !p2.isEmpty()) {
-			docId1 = p1.get(0); docId2 = p2.get(0);
+
+		while (!p1.isEmpty() && !p2.isEmpty()) {
+			docId1 = p1.get(0);
+			docId2 = p2.get(0);
 			isUndermost = false;
-			if (docId1.compareTo(docId2) < 0) {isUndermost = true;}
-			
+			if (docId1.compareTo(docId2) < 0) {
+				isUndermost = true;
+			}
+
 			if (docId1.equals(docId2)) {
 				answer.add(docId1);
 				p1.remove(0);
@@ -170,14 +262,17 @@ public class Query {
 				p2.remove(0);
 			}
 		}
-		
+
 		return answer;
 	}
-	
+
 	/**
 	 * Méthode pour faire l'union de deux listes.
-	 * @param x Liste 1.
-	 * @param y Liste 2.
+	 * 
+	 * @param x
+	 *            Liste 1.
+	 * @param y
+	 *            Liste 2.
 	 * @return Retourne la liste d'union des deux listes.
 	 */
 	public ArrayList<String> union(ArrayList<String> x, ArrayList<String> y) {
@@ -187,10 +282,13 @@ public class Query {
 		String docId1, docId2;
 		boolean isUndermost;
 		do {
-			docId1 = x.get(0); docId2 = y.get(0);
+			docId1 = x.get(0);
+			docId2 = y.get(0);
 			isUndermost = false;
-			if (docId1.compareTo(docId2) < 0) {isUndermost = true;}
-			
+			if (docId1.compareTo(docId2) < 0) {
+				isUndermost = true;
+			}
+
 			if (docId1.equals(docId2)) {
 				answer.add(docId1);
 				x.remove(0);
@@ -202,7 +300,7 @@ public class Query {
 				answer.add(docId2);
 				y.remove(0);
 			}
-		} while(!x.isEmpty() && !y.isEmpty());
+		} while (!x.isEmpty() && !y.isEmpty());
 		if (x.isEmpty()) {
 			for (String s : y) {
 				answer.add(s);
@@ -212,12 +310,13 @@ public class Query {
 				answer.add(s);
 			}
 		}
-		
+
 		return answer;
 	}
-	
+
 	/**
 	 * Méthode pour trier le résultat de la méthode queryProcess.
+	 * 
 	 * @return Retourne le résultat trier par ordre d'importance des documents.
 	 */
 	public ArrayList<String> sortResult() {
@@ -234,7 +333,8 @@ public class Query {
 			temp2.clear();
 			temp2.putAll(temp);
 			for (Entry<String, Integer> entry : temp2.entrySet()) {
-				if (i == entry.getValue() && !sortResult.contains(entry.getKey())) {
+				if (i == entry.getValue()
+						&& !sortResult.contains(entry.getKey())) {
 					sortResult.add(entry.getKey());
 					temp.remove(entry.getKey());
 				}
@@ -242,9 +342,10 @@ public class Query {
 		}
 		return sortResult;
 	}
-	
+
 	/**
 	 * Méthode pour afficher les résultats.
+	 * 
 	 * @return Retourne une chaine contenant les noms de documents recherchés.
 	 */
 	public String displayResult() {
@@ -252,7 +353,7 @@ public class Query {
 		if (docIdResults.size() > 0) {
 			totalDocFind = docIdResults.size();
 			for (String s : sortResult()) {
-				result = result + s+ "\n";
+				result = result + s + "\n";
 			}
 		} else if (docIdResultsBoolean.size() > 0) {
 			totalDocFind = docIdResultsBoolean.size();
@@ -268,5 +369,5 @@ public class Query {
 	public int getTotalDocFind() {
 		return totalDocFind;
 	}
-	
+
 }
