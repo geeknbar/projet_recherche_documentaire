@@ -98,14 +98,13 @@ public class Query {
 
 		String operator = "";
 		if (query.contains("&")) {
-			System.out.println("&");
+
 			operator = "&";
 			query = query.replaceAll("&", " ");
 			stemQuery = parser.tokenizeLine(query);
 			p1 = searchWord(stemQuery.get(0));
 			p2 = searchWord(stemQuery.get(1));
 		} else if (query.contains("|")) {
-			System.out.println("|");
 			operator = "|";
 			query = query.replaceAll("\\|", " ");
 			System.out.println(query);
@@ -113,12 +112,8 @@ public class Query {
 			p1 = searchWord(stemQuery.get(0));
 			p2 = searchWord(stemQuery.get(1));
 		} else {
-			System.out.println("SANS OP");
 			queryProcess(query);
 		}
-
-		System.out.println("SIZE P1 : " + p1.size());
-		System.out.println("SIZE P2 : " + p2.size());
 		
 		switch(operator) {
 			case "": queryProcess(query);break;
@@ -159,8 +154,7 @@ public class Query {
 		Collections.sort(y);
 		String docId1, docId2;
 		boolean isUndermost;
-		
-		while(!x.isEmpty() && !y.isEmpty()) {
+		do {
 			docId1 = x.get(0); docId2 = y.get(0);
 			isUndermost = false;
 			if (docId1.compareTo(docId2) < 0) {isUndermost = true;}
@@ -175,6 +169,15 @@ public class Query {
 			} else {
 				answer.add(docId2);
 				y.remove(0);
+			}
+		} while(!x.isEmpty() && !y.isEmpty());
+		if (x.isEmpty()) {
+			for (String s : y) {
+				answer.add(s);
+			}
+		} else if (y.isEmpty()) {
+			for (String s : x) {
+				answer.add(s);
 			}
 		}
 		
